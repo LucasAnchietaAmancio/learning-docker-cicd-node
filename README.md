@@ -1,52 +1,53 @@
 # Exercício Backend + DevOps
 
-Exercício prático para treinar integração entre:
+Projeto para treinar integração entre:
 
-* Node.js
-* Express
-* PostgreSQL
-* Docker
-* GitHub Actions
+- Node.js
+- Express
+- PostgreSQL
+- Docker
+- GitHub Actions
 
 O objetivo é criar uma API simples, containerizar a aplicação e configurar um pipeline de CI.
 
 ---
 
-# Objetivo
+## Objetivo
 
 Criar uma API REST que salva usuários em um banco PostgreSQL, rodando em container Docker e com testes executados automaticamente via CI.
 
 ---
 
-# Tecnologias
+## Tecnologias
 
-* Node.js
-* Express
-* PostgreSQL
-* Docker
-* GitHub Actions
-* Jest
-
----
-
-# Estrutura do Projeto
-
-docker-node-api
-
-src
-├─ server.js
-└─ db.js
-
-tests
-└─ user.test.js
-
-Dockerfile
-package.json
-README.md
+- Node.js
+- Express
+- PostgreSQL
+- Docker
+- GitHub Actions
+- Jest
 
 ---
 
-# Funcionalidades
+## Estrutura do Projeto
+
+```
+atividade-docker-github-actions
+├─ src
+│  ├─ entities
+│  └─ services
+├─ tests
+│  └─ entities
+│  └─ services
+├─ Dockerfile
+├─ package.json
+├─ README.md
+└─ .github/workflows/ci.yml
+```
+
+---
+
+## Funcionalidades
 
 ### Criar usuário
 
@@ -54,12 +55,14 @@ POST /users
 
 Body:
 
+```json
 {
-"name": "Lucas",
-"email": "[lucas@email.com](mailto:lucas@email.com)"
+  "name": "Lucas",
+  "email": "lucas@email.com",
+  "addess": "rua 1 bairro x",
+  "uf": "MT"
 }
-
----
+```
 
 ### Listar usuários
 
@@ -67,100 +70,269 @@ GET /users
 
 Retorno esperado:
 
+```json
 [
-{ "id":1, "name":"Lucas", "email":"[lucas@email.com](mailto:lucas@email.com)" }
+  { "id": 1, "name": "Lucas", "email": "lucas@email.com" }
 ]
+```
 
 ---
 
-# Banco de dados
+## Banco de dados
 
 Banco utilizado: PostgreSQL
 
-Configuração:
+Configuração padrão:
 
-host: localhost
-port: 5432
-database: docker_api
-user: postgres
-password: postgres
+- host: localhost
+- port: 5432
+- database: docker_api
+- user: postgres
+- password: postgres
 
 Tabela:
 
-users
+- users
 
 Campos:
 
-id SERIAL PRIMARY KEY
-name TEXT
-email TEXT
+- id SERIAL PRIMARY KEY
+- name TEXT
+- email TEXT
 
 ---
 
-# Docker
+## Docker
 
 Subir container do banco:
 
-docker run -d 
---name postgres-api 
--e POSTGRES_PASSWORD=postgres 
--e POSTGRES_DB=docker_api 
--p 5432:5432 
-postgres
-
----
+```bash
+docker run -d \
+  --name postgres-api \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=docker_api \
+  -p 5432:5432 \
+  postgres
+```
 
 Build da aplicação:
 
+```bash
 docker build -t node-api .
+```
 
 Rodar container da API:
 
+```bash
 docker run -p 3000:3000 node-api
+```
 
 ---
 
-# Testes
+## Testes
 
 Executar testes:
 
+```bash
 npm test
+```
 
 Teste obrigatório:
 
-POST /users
-
-Validações:
-
-* retorna status 201
-* usuário criado no banco
+- POST /users
+- retorna status 201
+- usuário criado no banco
 
 ---
 
-# CI
+## CI
 
 Pipeline configurado com GitHub Actions.
 
 Arquivo:
 
-.github/workflows/ci.yml
+`.github/workflows/ci.yml`
 
 Executado quando ocorre:
 
-push na branch main
+- push na branch `main`
 
 Fluxo:
 
-push → install dependencies → run tests
+- push → install dependencies → run tests
 
 ---
 
-# Arquitetura
+## Arquitetura
 
-Docker Host
+- Docker Host
+  - Container API (Node + Express)
+  - Container Database (PostgreSQL)
+```// filepath: /home/lucas/dev/atividade-docker-github-actions/README.md
+# Exercício Backend + DevOps
 
-Container API
-(Node + Express)
+Projeto para treinar integração entre:
 
-Container Database
-(PostgreSQL)
+- Node.js
+- Express
+- PostgreSQL
+- Docker
+- GitHub Actions
+
+O objetivo é criar uma API simples, containerizar a aplicação e configurar um pipeline de CI.
+
+---
+
+## Objetivo
+
+Criar uma API REST que salva usuários em um banco PostgreSQL, rodando em container Docker e com testes executados automaticamente via CI.
+
+---
+
+## Tecnologias
+
+- Node.js
+- Express
+- PostgreSQL
+- Docker
+- GitHub Actions
+- Jest
+
+---
+
+## Estrutura do Projeto
+
+```
+atividade-docker-github-actions
+├─ src
+│  ├─ server.js
+│  └─ db.js
+├─ tests
+│  └─ user.test.js
+├─ Dockerfile
+├─ package.json
+├─ README.md
+└─ .github/workflows/ci.yml
+```
+
+---
+
+## Funcionalidades
+
+### Criar usuário
+
+POST /users
+
+Body:
+
+```json
+{
+  "name": "Lucas",
+  "email": "lucas@email.com"
+}
+```
+
+### Listar usuários
+
+GET /users
+
+Retorno esperado:
+
+```json
+[
+  { "id": 1, "name": "Lucas", "email": "lucas@email.com" }
+]
+```
+
+---
+
+## Banco de dados
+
+Banco utilizado: PostgreSQL
+
+Configuração padrão:
+
+- host: localhost
+- port: 5432
+- database: docker_api
+- user: postgres
+- password: postgres
+
+Tabela:
+
+- users
+
+Campos:
+
+- id SERIAL PRIMARY KEY
+- name TEXT
+- email TEXT
+
+---
+
+## Docker
+
+Subir container do banco:
+
+```bash
+docker run -d \
+  --name postgres-api \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=docker_api \
+  -p 5432:5432 \
+  postgres
+```
+
+Build da aplicação:
+
+```bash
+docker build -t node-api .
+```
+
+Rodar container da API:
+
+```bash
+docker run -p 3000:3000 node-api
+```
+
+---
+
+## Testes
+
+Executar testes:
+
+```bash
+npm test
+```
+
+Teste obrigatório:
+
+- POST /users
+- retorna status 201
+- usuário criado no banco
+
+---
+
+## CI
+
+Pipeline configurado com GitHub Actions.
+
+Arquivo:
+
+`.github/workflows/ci.yml`
+
+Executado quando ocorre:
+
+- push na branch `main`
+
+Fluxo:
+
+- push → install dependencies → run tests
+
+---
+
+## Arquitetura
+
+- Docker Host
+  - Container API (Node + Express)
+  - Container Database (PostgreSQL)
