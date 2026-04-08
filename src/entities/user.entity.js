@@ -10,13 +10,20 @@ class UserEntity {
 
     static validateInput(name, email, address, uf) {
         if (!name || !email || !address || !uf) {
-            throw new Error("Informações Inválidas ou não fornecidas");
+            throw new Error("Informações inválidas ou não fornecidas");
         }
-        if (typeof uf !== "string" || uf.length > 2) {
-            throw new Error("UF informada inválida para gravação");
+        if (typeof uf !== "string" || uf.length !== 2) {
+            throw new Error("UF deve ter exatamente 2 caracteres");
         }
-        if (!email.includes('@') || !email.includes('.com')) {
-            throw new Error("Informações Inválidas ou não fornecidas");
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            throw new Error("Email inválido");
+        }
+        if (name.trim().length < 3) {
+            throw new Error("Nome deve ter pelo menos 3 caracteres");
+        }
+        if (address.trim().length < 5) {
+            throw new Error("Endereço deve ter pelo menos 5 caracteres");
         }
     }
 }

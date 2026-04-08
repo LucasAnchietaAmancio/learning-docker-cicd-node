@@ -30,7 +30,7 @@ test('Deve retornar um erro caso a uf seja do tipo diferente de string', () => {
             address: "123 Main St",
             uf: 123
         });
-    }).toThrow("UF informada inválida para gravação");
+    }).toThrow("UF deve ter exatamente 2 caracteres");
 });
 
 test('Deve retornar um erro caso o email seja inválido', () => {
