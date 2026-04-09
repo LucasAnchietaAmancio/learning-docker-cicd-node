@@ -1,4 +1,4 @@
-name: "Test Docker application"
+name: Test Docker application
 
 on:
     push:
