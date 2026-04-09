@@ -13,15 +13,17 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: "Checkout application"
-              uses: actions/checkout@v6
-            
-            - name: "Setup docker"
-              uses: docker/setup-docker-action@v5
-
-            - name: "Build image docker"
-              run: docker build -t anvra/api-cadastro:1.0.0 .
+              uses: actions/checkout@v4 
 
             - name: "Login in Docker Hub"
-              run: |
-                docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-                docker push anvra/api-cadastro:1.0.0
+              uses: docker/login-action@v3 
+              with:
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+
+            - name: "Build and Push image"
+              uses: docker/build-push-action@v5 
+              with:
+                context: .
+                push: true
+                tags: lucasanchietaamancio/api-cadastro:1.0.0
