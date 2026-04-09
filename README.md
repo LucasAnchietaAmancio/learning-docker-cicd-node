@@ -329,7 +329,7 @@ Este projeto está preparado para:
 
 ### Melhorias Futuras
 
-- [ ] Adicionar Docker Compose
+- [ X ] Adicionar Docker Compose
 - [ ] Adicionar step de deploy automatico com GitHub Actions
 - [ ] Adicionar Métodos de observabilidade
 
