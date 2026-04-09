@@ -1,0 +1,27 @@
+name: Docker Publish Image
+
+on:
+    push:
+        branches:
+            - dev
+    pull_request:
+        branches:
+            - dev
+
+jobs:
+    publish-image-in-docker-hub:
+        runs-on: ubuntu-latest
+        steps:
+            - name: "Checkout application"
+              uses: actions/checkout@v6
+            
+            - name: "Setup docker"
+              uses: docker/setup-docker-action@v5
+
+            - name: "Build image docker"
+              run: docker build -t anvra/api-cadastro:1.0.0 .
+
+            - name: "Login in Docker Hub"
+              run: |
+                docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+                docker push anvra/api-cadastro:1.0.0
