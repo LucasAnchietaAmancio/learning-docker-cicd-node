@@ -1,0 +1,28 @@
+name: "Test Docker application"
+
+on:
+    push:
+        branches:
+            - dev
+    pull_request:
+        branches:
+            - dev
+
+jobs:
+    test-docker:
+        runs-on: ubuntu-latest
+        steps:
+            - name: "Checkout application"
+              uses: actions/checkout@v4
+
+            - name: "Setup docker"
+              uses: docker/setup-docker-action@v5
+            
+            - name: "Run docker compose"
+              run: docker compose up -d --build
+              env:
+                DB_USER: ${{ secrets.DB_USER }}
+                DB_HOST: ${{ secrets.DB_HOST }}
+                DB_NAME: ${{ secrets.DB_NAME }}
+                DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+                DB_PORT: ${{ secrets.DB_PORT }}

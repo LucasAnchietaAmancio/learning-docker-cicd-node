@@ -1,0 +1,31 @@
+version: "3.7" ##Especifica a versão do docker-compose que está sendo utilizada
+
+services:
+  db: 
+    image: postgres:latest ## Baixa a imagem do postgres mais recente
+    ports:
+      - 5432:5432 ## Mapeia a porta para rodar o container com o postgres
+    environment: ## Passa as variaveis de ambiente necessárias para a configuração do banco de dados
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DB_USER}"] ## Verifica se o banco de dados está pronto para receber conexões
+      interval: 10s ## Intervalo entre as verificações
+      timeout: 5s ## Tempo limite para a verificação
+      retries: 5 ## Número de tentativas antes de considerar o serviço como não saudável
+    volumes:
+      - /var/lib/postgresql/api_cadastro ## Cria um volume para persistir os dados do banco de dados mesmo que o container seja parado ou removido
+  app:
+    build: . ## Vai fazer o build do Dockerfile presente na raiz do projeto
+    ports:
+      - "3001:3001" ## Mapeia a porta 3001 para rodar o container
+    depends_on:
+        db:
+          condition: service_healthy ## Garante que só irá iniciar o container da aplicação depois que o container do banco de dados estiver saudável e pronto para receber conexões
+    environment: ## Passa as variáveis de ambiente para o container
+      - DB_USER=${DB_USER}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
